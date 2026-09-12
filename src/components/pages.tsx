@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, XAxis, YAxis } from "recharts";
-import { Bike, CalendarCheck, Check, ChevronRight, CircleDollarSign, ClipboardCheck, Clock3, Download, FileSpreadsheet, FileText, IndianRupee, Landmark, PackageCheck, Plus, Printer, Search, ShieldCheck, TrendingUp, Upload, UserPlus, Users, WalletCards } from "lucide-react";
+import { Bike, CalendarCheck, Check, ChevronRight, CircleDollarSign, ClipboardCheck, Clock3, Download, FileSpreadsheet, FileText, IndianRupee, Landmark, Plus, Printer, Search, Settings, ShieldCheck, TrendingUp, Upload, UserPlus, Users, WalletCards } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { VehicleDetailPage } from "@/components/pages";
 
-export const Route = createFileRoute("/inventory/$id")({
+export const Route = createFileRoute("/inventory/$id/")({
   head: () => ({ meta: [
     { title: "Vehicle Detail — SRIVAARI AUTOMOBILES" },
     { name: "description", content: "View vehicle identity, price, status, and history." },

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SmartFormPage } from "@/components/pages";
+import { RecordFormPage } from "@/components/forms";
 
 export const Route = createFileRoute("/finance/applications/new")({
   head: () => ({ meta: [
@@ -13,4 +13,4 @@ export const Route = createFileRoute("/finance/applications/new")({
   component: Page,
 });
 
-function Page() { return <SmartFormPage type="finance"/>; }
+function Page() { return <RecordFormPage module="finance"/>; }

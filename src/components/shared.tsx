@@ -1,9 +1,10 @@
 import { type ReactNode, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowDownUp, ChevronLeft, ChevronRight, Inbox, MoreHorizontal, Search } from "lucide-react";
+import { ArrowDownUp, ChevronLeft, ChevronRight, Inbox, MoreHorizontal, Pencil, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { formatCurrency, toneForStatus, type RecordRow, type Tone } from "@/lib/domain";
@@ -33,15 +34,41 @@ export function JourneyStepper({ active = 5 }: { active?: number }) {
   return <div className="overflow-x-auto pb-2"><div className="flex min-w-[780px] items-start">{steps.map((step, index) => <div key={step} className="relative flex flex-1 flex-col items-center text-center"><div className={cn("absolute left-0 top-4 h-0.5 w-full", index === 0 ? "hidden" : index <= active ? "bg-primary" : "bg-border")} /><div className={cn("relative z-10 grid size-8 place-items-center rounded-full border-2 text-xs font-bold", index < active && "border-primary bg-primary text-primary-foreground", index === active && "border-primary bg-background text-primary shadow-glow", index > active && "border-border bg-background text-muted-foreground")}>{index < active ? "✓" : index + 1}</div><span className={cn("mt-2 text-xs font-semibold", index <= active ? "text-foreground" : "text-muted-foreground")}>{step}</span></div>)}</div></div>;
 }
 
+const linkClass = "font-semibold text-primary hover:underline";
+
 function RecordLink({ basePath, id }: { basePath: string; id: string }) {
-  if (basePath === "/bookings") return <Link to="/bookings/$id" params={{ id }} className="font-semibold text-primary">{id}</Link>;
-  if (basePath === "/enquiries") return <Link to="/enquiries/$id" params={{ id }} className="font-semibold text-primary">{id}</Link>;
-  if (basePath === "/proforma") return <Link to="/proforma/$id" params={{ id }} className="font-semibold text-primary">{id}</Link>;
-  if (basePath === "/finance/applications") return <Link to="/finance/applications/$id" params={{ id }} className="font-semibold text-primary">{id}</Link>;
-  if (basePath === "/insurance") return <Link to="/insurance/$id" params={{ id }} className="font-semibold text-primary">{id}</Link>;
-  if (basePath === "/registration") return <Link to="/registration/$id" params={{ id }} className="font-semibold text-primary">{id}</Link>;
-  if (basePath === "/deliveries") return <Link to="/deliveries/$id" params={{ id }} className="font-semibold text-primary">{id}</Link>;
+  if (basePath === "/bookings") return <Link to="/bookings/$id" params={{ id }} className={linkClass}>{id}</Link>;
+  if (basePath === "/enquiries") return <Link to="/enquiries/$id" params={{ id }} className={linkClass}>{id}</Link>;
+  if (basePath === "/proforma") return <Link to="/proforma/$id" params={{ id }} className={linkClass}>{id}</Link>;
+  if (basePath === "/finance/applications") return <Link to="/finance/applications/$id" params={{ id }} className={linkClass}>{id}</Link>;
+  if (basePath === "/finance/refinance") return <Link to="/finance/refinance/$id" params={{ id }} className={linkClass}>{id}</Link>;
+  if (basePath === "/insurance") return <Link to="/insurance/$id" params={{ id }} className={linkClass}>{id}</Link>;
+  if (basePath === "/registration") return <Link to="/registration/$id" params={{ id }} className={linkClass}>{id}</Link>;
+  if (basePath === "/deliveries") return <Link to="/deliveries/$id" params={{ id }} className={linkClass}>{id}</Link>;
   return <span className="font-semibold text-primary">{id}</span>;
+}
+
+export function EditLink({ basePath, id, children, className }: { basePath: string; id: string; children: ReactNode; className?: string }) {
+  if (basePath === "/bookings") return <Link to="/bookings/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/customers") return <Link to="/customers/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/inventory") return <Link to="/inventory/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/enquiries") return <Link to="/enquiries/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/proforma") return <Link to="/proforma/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/finance/applications") return <Link to="/finance/applications/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/finance/refinance") return <Link to="/finance/refinance/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/insurance") return <Link to="/insurance/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  if (basePath === "/registration") return <Link to="/registration/$id/edit" params={{ id }} className={className}>{children}</Link>;
+  return <Link to="/deliveries/$id/edit" params={{ id }} className={className}>{children}</Link>;
+}
+
+export function RowActions({ basePath, id }: { basePath: string; id: string }) {
+  return <DropdownMenu>
+    <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label={`Actions for ${id}`}><MoreHorizontal/></Button></DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem asChild><RecordLink basePath={basePath} id={id}/></DropdownMenuItem>
+      <DropdownMenuItem asChild><EditLink basePath={basePath} id={id}><span className="flex w-full items-center gap-2"><Pencil className="size-4"/> Edit</span></EditLink></DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>;
 }
 
 export function ModernTable({ rows, basePath }: { rows: RecordRow[]; basePath: string }) {
@@ -49,7 +76,7 @@ export function ModernTable({ rows, basePath }: { rows: RecordRow[]; basePath: s
   const [page, setPage] = useState(1);
   const filtered = useMemo(() => rows.filter((row) => Object.values(row).join(" ").toLowerCase().includes(query.toLowerCase())), [query, rows]);
   return <GlassCard className="overflow-hidden"><div className="flex flex-col gap-3 border-b border-border/70 p-4 sm:flex-row sm:items-center sm:justify-between"><div className="relative max-w-md flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"/><Input value={query} onChange={(event) => setQuery(event.target.value)} className="pl-9" placeholder="Search records..."/></div><Button variant="outline" size="sm"><ArrowDownUp/> Sort</Button></div>
-    {filtered.length === 0 ? <EmptyState title="No matching records" description="Try another search or clear your filters." /> : <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left"><thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground"><tr><th className="px-5 py-3.5">Record</th><th className="px-5 py-3.5">Customer / Asset</th><th className="px-5 py-3.5">Details</th><th className="px-5 py-3.5">Date</th><th className="px-5 py-3.5">Status</th><th className="px-5 py-3.5 text-right">Amount</th><th className="w-12"/></tr></thead><tbody>{filtered.map((row) => <tr key={row.id} className="border-t border-border/60 transition-colors hover:bg-primary-soft/40"><td className="px-5 py-4"><RecordLink basePath={basePath} id={row.id}/></td><td className="px-5 py-4"><p className="font-semibold text-foreground">{row.primary}</p><p className="text-xs text-muted-foreground">{row.secondary}</p></td><td className="px-5 py-4 text-sm text-muted-foreground">{row.detail}</td><td className="px-5 py-4 text-sm text-muted-foreground">{row.date}</td><td className="px-5 py-4"><StatusBadge status={row.status}/></td><td className="px-5 py-4 text-right font-semibold">{row.amount ? formatCurrency(row.amount) : "—"}</td><td><Button variant="ghost" size="icon" aria-label={`Actions for ${row.id}`}><MoreHorizontal/></Button></td></tr>)}</tbody></table></div>}
+    {filtered.length === 0 ? <EmptyState title="No matching records" description="Try another search or clear your filters." /> : <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left"><thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground"><tr><th className="px-5 py-3.5">Record</th><th className="px-5 py-3.5">Customer / Asset</th><th className="px-5 py-3.5">Details</th><th className="px-5 py-3.5">Date</th><th className="px-5 py-3.5">Status</th><th className="px-5 py-3.5 text-right">Amount</th><th className="w-12"/></tr></thead><tbody>{filtered.map((row) => <tr key={row.id} className="border-t border-border/60 transition-colors hover:bg-primary-soft/40"><td className="px-5 py-4"><RecordLink basePath={basePath} id={row.id}/></td><td className="px-5 py-4"><p className="font-semibold text-foreground">{row.primary}</p><p className="text-xs text-muted-foreground">{row.secondary}</p></td><td className="px-5 py-4 text-sm text-muted-foreground">{row.detail}</td><td className="px-5 py-4 text-sm text-muted-foreground">{row.date}</td><td className="px-5 py-4"><StatusBadge status={row.status}/></td><td className="px-5 py-4 text-right font-semibold">{row.amount ? formatCurrency(row.amount) : "—"}</td><td><RowActions basePath={basePath} id={row.id}/></td></tr>)}</tbody></table></div>}
     <div className="flex items-center justify-between border-t border-border/70 px-5 py-3"><span className="text-xs text-muted-foreground">Showing {filtered.length} of {rows.length} records</span><div className="flex gap-1"><Button variant="ghost" size="icon" disabled={page === 1} onClick={() => setPage(1)}><ChevronLeft/></Button><Button variant="outline" size="sm">{page}</Button><Button variant="ghost" size="icon" onClick={() => setPage(page + 1)}><ChevronRight/></Button></div></div>
   </GlassCard>;
 }

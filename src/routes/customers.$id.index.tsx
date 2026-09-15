@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CustomerDetailPage } from "@/components/pages";
 
-export const Route = createFileRoute("/customers/$id")({
+export const Route = createFileRoute("/customers/$id/")({
   head: () => ({ meta: [
     { title: "Customer Profile — SRIVAARI AUTOMOBILES" },
     { name: "description", content: "View customer information and complete transaction history." },
@@ -13,4 +13,4 @@ export const Route = createFileRoute("/customers/$id")({
   component: Page,
 });
 
-function Page() { return <CustomerDetailPage/>; }
+function Page() { return <CustomerDetailPage id={Route.useParams().id}/>; }

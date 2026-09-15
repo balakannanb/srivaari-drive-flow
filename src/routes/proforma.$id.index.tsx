@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DetailPage } from "@/components/pages";
 
-export const Route = createFileRoute("/proforma/$id")({
+export const Route = createFileRoute("/proforma/$id/")({
   head: () => ({ meta: [
     { title: "Proforma Detail — SRIVAARI AUTOMOBILES" },
     { name: "description", content: "Review customer, vehicle, and proforma pricing." },

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CustomerFormPage } from "@/components/pages";
+import { RecordFormPage } from "@/components/forms";
 
 export const Route = createFileRoute("/customers/new")({
   head: () => ({ meta: [
@@ -13,4 +13,4 @@ export const Route = createFileRoute("/customers/new")({
   component: Page,
 });
 
-function Page() { return <CustomerFormPage/>; }
+function Page() { return <RecordFormPage module="customer"/>; }

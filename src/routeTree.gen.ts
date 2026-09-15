@@ -59,6 +59,7 @@ import { Route as RegistrationIdIndexRouteImport } from './routes/registration.$
 import { Route as RegistrationIdEditRouteImport } from './routes/registration.$id.edit'
 import { Route as FinanceApplicationsIdIndexRouteImport } from './routes/finance.applications.$id.index'
 import { Route as FinanceApplicationsIdEditRouteImport } from './routes/finance.applications.$id.edit'
+import { Route as FinanceRefinanceIdIndexRouteImport } from './routes/finance.refinance.$id.index'
 import { Route as FinanceRefinanceIdEditRouteImport } from './routes/finance.refinance.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
@@ -314,6 +315,11 @@ const FinanceApplicationsIdEditRoute =
     path: '/finance/applications/$id/edit',
     getParentRoute: () => rootRouteImport,
   } as any)
+const FinanceRefinanceIdIndexRoute = FinanceRefinanceIdIndexRouteImport.update({
+  id: '/finance/refinance/$id/',
+  path: '/finance/refinance/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FinanceRefinanceIdEditRoute = FinanceRefinanceIdEditRouteImport.update({
   id: '/finance/refinance/$id/edit',
   path: '/finance/refinance/$id/edit',
@@ -372,6 +378,7 @@ export interface FileRoutesByFullPath {
   '/finance/applications/$id/edit': typeof FinanceApplicationsIdEditRoute
   '/finance/refinance/$id/edit': typeof FinanceRefinanceIdEditRoute
   '/finance/applications/$id/': typeof FinanceApplicationsIdIndexRoute
+  '/finance/refinance/$id/': typeof FinanceRefinanceIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -425,6 +432,7 @@ export interface FileRoutesByTo {
   '/finance/applications/$id/edit': typeof FinanceApplicationsIdEditRoute
   '/finance/refinance/$id/edit': typeof FinanceRefinanceIdEditRoute
   '/finance/applications/$id': typeof FinanceApplicationsIdIndexRoute
+  '/finance/refinance/$id': typeof FinanceRefinanceIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -479,6 +487,7 @@ export interface FileRoutesById {
   '/finance/applications/$id/edit': typeof FinanceApplicationsIdEditRoute
   '/finance/refinance/$id/edit': typeof FinanceRefinanceIdEditRoute
   '/finance/applications/$id/': typeof FinanceApplicationsIdIndexRoute
+  '/finance/refinance/$id/': typeof FinanceRefinanceIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -534,6 +543,7 @@ export interface FileRouteTypes {
     | '/finance/applications/$id/edit'
     | '/finance/refinance/$id/edit'
     | '/finance/applications/$id/'
+    | '/finance/refinance/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -587,6 +597,7 @@ export interface FileRouteTypes {
     | '/finance/applications/$id/edit'
     | '/finance/refinance/$id/edit'
     | '/finance/applications/$id'
+    | '/finance/refinance/$id'
   id:
     | '__root__'
     | '/'
@@ -640,6 +651,7 @@ export interface FileRouteTypes {
     | '/finance/applications/$id/edit'
     | '/finance/refinance/$id/edit'
     | '/finance/applications/$id/'
+    | '/finance/refinance/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -694,6 +706,7 @@ export interface RootRouteChildren {
   FinanceApplicationsIdEditRoute: typeof FinanceApplicationsIdEditRoute
   FinanceRefinanceIdEditRoute: typeof FinanceRefinanceIdEditRoute
   FinanceApplicationsIdIndexRoute: typeof FinanceApplicationsIdIndexRoute
+  FinanceRefinanceIdIndexRoute: typeof FinanceRefinanceIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1048,6 +1061,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinanceApplicationsIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/finance/refinance/$id/': {
+      id: '/finance/refinance/$id/'
+      path: '/finance/refinance/$id'
+      fullPath: '/finance/refinance/$id/'
+      preLoaderRoute: typeof FinanceRefinanceIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/finance/refinance/$id/edit': {
       id: '/finance/refinance/$id/edit'
       path: '/finance/refinance/$id/edit'
@@ -1110,6 +1130,7 @@ const rootRouteChildren: RootRouteChildren = {
   FinanceApplicationsIdEditRoute: FinanceApplicationsIdEditRoute,
   FinanceRefinanceIdEditRoute: FinanceRefinanceIdEditRoute,
   FinanceApplicationsIdIndexRoute: FinanceApplicationsIdIndexRoute,
+  FinanceRefinanceIdIndexRoute: FinanceRefinanceIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

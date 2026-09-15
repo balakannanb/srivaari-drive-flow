@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SmartFormPage } from "@/components/pages";
+import { RecordFormPage } from "@/components/forms";
 
 export const Route = createFileRoute("/proforma/new")({
   head: () => ({ meta: [
@@ -13,4 +13,4 @@ export const Route = createFileRoute("/proforma/new")({
   component: Page,
 });
 
-function Page() { return <SmartFormPage type="proforma"/>; }
+function Page() { return <RecordFormPage module="proforma"/>; }

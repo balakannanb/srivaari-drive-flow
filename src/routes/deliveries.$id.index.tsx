@@ -13,4 +13,4 @@ export const Route = createFileRoute("/deliveries/$id/")({
   component: Page,
 });
 
-function Page() { return <DeliveryDetailPage/>; }
+function Page() { return <DeliveryDetailPage id={Route.useParams().id}/>; }

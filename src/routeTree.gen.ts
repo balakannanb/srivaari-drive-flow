@@ -83,14 +83,14 @@ const AccountsIndexRoute = AccountsIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountsDailyRoute = AccountsDailyRouteImport.update({
-  id: '/accounts/daily',
-  path: '/accounts/daily',
-  getParentRoute: () => rootRouteImport,
+  id: '/daily',
+  path: '/daily',
+  getParentRoute: () => AccountsRoute,
 } as any)
 const AccountsMonthlyRoute = AccountsMonthlyRouteImport.update({
-  id: '/accounts/monthly',
-  path: '/accounts/monthly',
-  getParentRoute: () => rootRouteImport,
+  id: '/monthly',
+  path: '/monthly',
+  getParentRoute: () => AccountsRoute,
 } as any)
 const AccountsNewRoute = AccountsNewRouteImport.update({
   id: '/accounts/new',
@@ -188,19 +188,19 @@ const SettingsIndexRoute = SettingsIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsMasterDataRoute = SettingsMasterDataRouteImport.update({
-  id: '/settings/master-data',
-  path: '/settings/master-data',
-  getParentRoute: () => rootRouteImport,
+  id: '/master-data',
+  path: '/master-data',
+  getParentRoute: () => SettingsRoute,
 } as any)
 const SettingsRolesRoute = SettingsRolesRouteImport.update({
-  id: '/settings/roles',
-  path: '/settings/roles',
-  getParentRoute: () => rootRouteImport,
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => SettingsRoute,
 } as any)
 const SettingsUsersRoute = SettingsUsersRouteImport.update({
-  id: '/settings/users',
-  path: '/settings/users',
-  getParentRoute: () => rootRouteImport,
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => SettingsRoute,
 } as any)
 const BookingsIdIndexRoute = BookingsIdIndexRouteImport.update({
   id: '/bookings/$id/',
@@ -658,8 +658,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   ReportsRoute: typeof ReportsRoute
-  AccountsDailyRoute: typeof AccountsDailyRoute
-  AccountsMonthlyRoute: typeof AccountsMonthlyRoute
   AccountsNewRoute: typeof AccountsNewRoute
   BookingsNewRoute: typeof BookingsNewRoute
   CustomersNewRoute: typeof CustomersNewRoute
@@ -669,9 +667,6 @@ export interface RootRouteChildren {
   InventoryNewRoute: typeof InventoryNewRoute
   ProformaNewRoute: typeof ProformaNewRoute
   RegistrationNewRoute: typeof RegistrationNewRoute
-  SettingsMasterDataRoute: typeof SettingsMasterDataRoute
-  SettingsRolesRoute: typeof SettingsRolesRoute
-  SettingsUsersRoute: typeof SettingsUsersRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
   BookingsIndexRoute: typeof BookingsIndexRoute
   CustomersIndexRoute: typeof CustomersIndexRoute
@@ -741,17 +736,17 @@ declare module '@tanstack/react-router' {
     }
     '/accounts/daily': {
       id: '/accounts/daily'
-      path: '/accounts/daily'
+      path: '/daily'
       fullPath: '/accounts/daily'
       preLoaderRoute: typeof AccountsDailyRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AccountsRoute
     }
     '/accounts/monthly': {
       id: '/accounts/monthly'
-      path: '/accounts/monthly'
+      path: '/monthly'
       fullPath: '/accounts/monthly'
       preLoaderRoute: typeof AccountsMonthlyRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AccountsRoute
     }
     '/accounts/new': {
       id: '/accounts/new'
@@ -888,24 +883,24 @@ declare module '@tanstack/react-router' {
     }
     '/settings/master-data': {
       id: '/settings/master-data'
-      path: '/settings/master-data'
+      path: '/master-data'
       fullPath: '/settings/master-data'
       preLoaderRoute: typeof SettingsMasterDataRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof SettingsRoute
     }
     '/settings/roles': {
       id: '/settings/roles'
-      path: '/settings/roles'
+      path: '/roles'
       fullPath: '/settings/roles'
       preLoaderRoute: typeof SettingsRolesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof SettingsRoute
     }
     '/settings/users': {
       id: '/settings/users'
-      path: '/settings/users'
+      path: '/users'
       fullPath: '/settings/users'
       preLoaderRoute: typeof SettingsUsersRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof SettingsRoute
     }
     '/bookings/$id/': {
       id: '/bookings/$id/'
@@ -1082,8 +1077,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   ReportsRoute: ReportsRoute,
-  AccountsDailyRoute: AccountsDailyRoute,
-  AccountsMonthlyRoute: AccountsMonthlyRoute,
   AccountsNewRoute: AccountsNewRoute,
   BookingsNewRoute: BookingsNewRoute,
   CustomersNewRoute: CustomersNewRoute,
@@ -1093,9 +1086,6 @@ const rootRouteChildren: RootRouteChildren = {
   InventoryNewRoute: InventoryNewRoute,
   ProformaNewRoute: ProformaNewRoute,
   RegistrationNewRoute: RegistrationNewRoute,
-  SettingsMasterDataRoute: SettingsMasterDataRoute,
-  SettingsRolesRoute: SettingsRolesRoute,
-  SettingsUsersRoute: SettingsUsersRoute,
   AccountsIndexRoute: AccountsIndexRoute,
   BookingsIndexRoute: BookingsIndexRoute,
   CustomersIndexRoute: CustomersIndexRoute,

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SettingsPage } from "@/components/pages";
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/settings/")({
   head: () => ({ meta: [
     { title: "Settings — SRIVAARI AUTOMOBILES" },
     { name: "description", content: "Configure showroom information and operating preferences." },

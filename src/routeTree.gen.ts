@@ -25,6 +25,7 @@ import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as AccountsDailyRouteImport } from './routes/accounts.daily'
 import { Route as AccountsMonthlyRouteImport } from './routes/accounts.monthly'
+import { Route as AccountsNewRouteImport } from './routes/accounts.new'
 import { Route as BookingsIdRouteImport } from './routes/bookings.$id'
 import { Route as BookingsNewRouteImport } from './routes/bookings.new'
 import { Route as CustomersIdRouteImport } from './routes/customers.$id'
@@ -46,8 +47,19 @@ import { Route as RegistrationNewRouteImport } from './routes/registration.new'
 import { Route as SettingsMasterDataRouteImport } from './routes/settings.master-data'
 import { Route as SettingsRolesRouteImport } from './routes/settings.roles'
 import { Route as SettingsUsersRouteImport } from './routes/settings.users'
+import { Route as BookingsIdEditRouteImport } from './routes/bookings.$id.edit'
+import { Route as CustomersIdEditRouteImport } from './routes/customers.$id.edit'
+import { Route as DeliveriesIdEditRouteImport } from './routes/deliveries.$id.edit'
+import { Route as EnquiriesIdEditRouteImport } from './routes/enquiries.$id.edit'
 import { Route as FinanceApplicationsIdRouteImport } from './routes/finance.applications.$id'
 import { Route as FinanceApplicationsNewRouteImport } from './routes/finance.applications.new'
+import { Route as FinanceRefinanceNewRouteImport } from './routes/finance.refinance.new'
+import { Route as InsuranceIdEditRouteImport } from './routes/insurance.$id.edit'
+import { Route as InventoryIdEditRouteImport } from './routes/inventory.$id.edit'
+import { Route as ProformaIdEditRouteImport } from './routes/proforma.$id.edit'
+import { Route as RegistrationIdEditRouteImport } from './routes/registration.$id.edit'
+import { Route as FinanceApplicationsIdEditRouteImport } from './routes/finance.applications.$id.edit'
+import { Route as FinanceRefinanceIdEditRouteImport } from './routes/finance.refinance.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -127,6 +139,11 @@ const AccountsDailyRoute = AccountsDailyRouteImport.update({
 const AccountsMonthlyRoute = AccountsMonthlyRouteImport.update({
   id: '/monthly',
   path: '/monthly',
+  getParentRoute: () => AccountsRoute,
+} as any)
+const AccountsNewRoute = AccountsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
   getParentRoute: () => AccountsRoute,
 } as any)
 const BookingsIdRoute = BookingsIdRouteImport.update({
@@ -234,6 +251,26 @@ const SettingsUsersRoute = SettingsUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => SettingsRoute,
 } as any)
+const BookingsIdEditRoute = BookingsIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => BookingsIdRoute,
+} as any)
+const CustomersIdEditRoute = CustomersIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => CustomersIdRoute,
+} as any)
+const DeliveriesIdEditRoute = DeliveriesIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => DeliveriesIdRoute,
+} as any)
+const EnquiriesIdEditRoute = EnquiriesIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => EnquiriesIdRoute,
+} as any)
 const FinanceApplicationsIdRoute = FinanceApplicationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -243,6 +280,42 @@ const FinanceApplicationsNewRoute = FinanceApplicationsNewRouteImport.update({
   id: '/new',
   path: '/new',
   getParentRoute: () => FinanceApplicationsRoute,
+} as any)
+const FinanceRefinanceNewRoute = FinanceRefinanceNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => FinanceRefinanceRoute,
+} as any)
+const InsuranceIdEditRoute = InsuranceIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => InsuranceIdRoute,
+} as any)
+const InventoryIdEditRoute = InventoryIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => InventoryIdRoute,
+} as any)
+const ProformaIdEditRoute = ProformaIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => ProformaIdRoute,
+} as any)
+const RegistrationIdEditRoute = RegistrationIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => RegistrationIdRoute,
+} as any)
+const FinanceApplicationsIdEditRoute =
+  FinanceApplicationsIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => FinanceApplicationsIdRoute,
+  } as any)
+const FinanceRefinanceIdEditRoute = FinanceRefinanceIdEditRouteImport.update({
+  id: '/$id/edit',
+  path: '/$id/edit',
+  getParentRoute: () => FinanceRefinanceRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -262,29 +335,41 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRouteWithChildren
   '/accounts/daily': typeof AccountsDailyRoute
   '/accounts/monthly': typeof AccountsMonthlyRoute
-  '/bookings/$id': typeof BookingsIdRoute
+  '/accounts/new': typeof AccountsNewRoute
+  '/bookings/$id': typeof BookingsIdRouteWithChildren
   '/bookings/new': typeof BookingsNewRoute
-  '/customers/$id': typeof CustomersIdRoute
+  '/customers/$id': typeof CustomersIdRouteWithChildren
   '/customers/new': typeof CustomersNewRoute
-  '/deliveries/$id': typeof DeliveriesIdRoute
+  '/deliveries/$id': typeof DeliveriesIdRouteWithChildren
   '/deliveries/new': typeof DeliveriesNewRoute
-  '/enquiries/$id': typeof EnquiriesIdRoute
+  '/enquiries/$id': typeof EnquiriesIdRouteWithChildren
   '/enquiries/new': typeof EnquiriesNewRoute
   '/finance/applications': typeof FinanceApplicationsRouteWithChildren
-  '/finance/refinance': typeof FinanceRefinanceRoute
-  '/insurance/$id': typeof InsuranceIdRoute
+  '/finance/refinance': typeof FinanceRefinanceRouteWithChildren
+  '/insurance/$id': typeof InsuranceIdRouteWithChildren
   '/insurance/new': typeof InsuranceNewRoute
-  '/inventory/$id': typeof InventoryIdRoute
+  '/inventory/$id': typeof InventoryIdRouteWithChildren
   '/inventory/new': typeof InventoryNewRoute
-  '/proforma/$id': typeof ProformaIdRoute
+  '/proforma/$id': typeof ProformaIdRouteWithChildren
   '/proforma/new': typeof ProformaNewRoute
-  '/registration/$id': typeof RegistrationIdRoute
+  '/registration/$id': typeof RegistrationIdRouteWithChildren
   '/registration/new': typeof RegistrationNewRoute
   '/settings/master-data': typeof SettingsMasterDataRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/settings/users': typeof SettingsUsersRoute
-  '/finance/applications/$id': typeof FinanceApplicationsIdRoute
+  '/bookings/$id/edit': typeof BookingsIdEditRoute
+  '/customers/$id/edit': typeof CustomersIdEditRoute
+  '/deliveries/$id/edit': typeof DeliveriesIdEditRoute
+  '/enquiries/$id/edit': typeof EnquiriesIdEditRoute
+  '/finance/applications/$id': typeof FinanceApplicationsIdRouteWithChildren
   '/finance/applications/new': typeof FinanceApplicationsNewRoute
+  '/finance/refinance/new': typeof FinanceRefinanceNewRoute
+  '/insurance/$id/edit': typeof InsuranceIdEditRoute
+  '/inventory/$id/edit': typeof InventoryIdEditRoute
+  '/proforma/$id/edit': typeof ProformaIdEditRoute
+  '/registration/$id/edit': typeof RegistrationIdEditRoute
+  '/finance/applications/$id/edit': typeof FinanceApplicationsIdEditRoute
+  '/finance/refinance/$id/edit': typeof FinanceRefinanceIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -303,29 +388,41 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRouteWithChildren
   '/accounts/daily': typeof AccountsDailyRoute
   '/accounts/monthly': typeof AccountsMonthlyRoute
-  '/bookings/$id': typeof BookingsIdRoute
+  '/accounts/new': typeof AccountsNewRoute
+  '/bookings/$id': typeof BookingsIdRouteWithChildren
   '/bookings/new': typeof BookingsNewRoute
-  '/customers/$id': typeof CustomersIdRoute
+  '/customers/$id': typeof CustomersIdRouteWithChildren
   '/customers/new': typeof CustomersNewRoute
-  '/deliveries/$id': typeof DeliveriesIdRoute
+  '/deliveries/$id': typeof DeliveriesIdRouteWithChildren
   '/deliveries/new': typeof DeliveriesNewRoute
-  '/enquiries/$id': typeof EnquiriesIdRoute
+  '/enquiries/$id': typeof EnquiriesIdRouteWithChildren
   '/enquiries/new': typeof EnquiriesNewRoute
   '/finance/applications': typeof FinanceApplicationsRouteWithChildren
-  '/finance/refinance': typeof FinanceRefinanceRoute
-  '/insurance/$id': typeof InsuranceIdRoute
+  '/finance/refinance': typeof FinanceRefinanceRouteWithChildren
+  '/insurance/$id': typeof InsuranceIdRouteWithChildren
   '/insurance/new': typeof InsuranceNewRoute
-  '/inventory/$id': typeof InventoryIdRoute
+  '/inventory/$id': typeof InventoryIdRouteWithChildren
   '/inventory/new': typeof InventoryNewRoute
-  '/proforma/$id': typeof ProformaIdRoute
+  '/proforma/$id': typeof ProformaIdRouteWithChildren
   '/proforma/new': typeof ProformaNewRoute
-  '/registration/$id': typeof RegistrationIdRoute
+  '/registration/$id': typeof RegistrationIdRouteWithChildren
   '/registration/new': typeof RegistrationNewRoute
   '/settings/master-data': typeof SettingsMasterDataRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/settings/users': typeof SettingsUsersRoute
-  '/finance/applications/$id': typeof FinanceApplicationsIdRoute
+  '/bookings/$id/edit': typeof BookingsIdEditRoute
+  '/customers/$id/edit': typeof CustomersIdEditRoute
+  '/deliveries/$id/edit': typeof DeliveriesIdEditRoute
+  '/enquiries/$id/edit': typeof EnquiriesIdEditRoute
+  '/finance/applications/$id': typeof FinanceApplicationsIdRouteWithChildren
   '/finance/applications/new': typeof FinanceApplicationsNewRoute
+  '/finance/refinance/new': typeof FinanceRefinanceNewRoute
+  '/insurance/$id/edit': typeof InsuranceIdEditRoute
+  '/inventory/$id/edit': typeof InventoryIdEditRoute
+  '/proforma/$id/edit': typeof ProformaIdEditRoute
+  '/registration/$id/edit': typeof RegistrationIdEditRoute
+  '/finance/applications/$id/edit': typeof FinanceApplicationsIdEditRoute
+  '/finance/refinance/$id/edit': typeof FinanceRefinanceIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -345,29 +442,41 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRouteWithChildren
   '/accounts/daily': typeof AccountsDailyRoute
   '/accounts/monthly': typeof AccountsMonthlyRoute
-  '/bookings/$id': typeof BookingsIdRoute
+  '/accounts/new': typeof AccountsNewRoute
+  '/bookings/$id': typeof BookingsIdRouteWithChildren
   '/bookings/new': typeof BookingsNewRoute
-  '/customers/$id': typeof CustomersIdRoute
+  '/customers/$id': typeof CustomersIdRouteWithChildren
   '/customers/new': typeof CustomersNewRoute
-  '/deliveries/$id': typeof DeliveriesIdRoute
+  '/deliveries/$id': typeof DeliveriesIdRouteWithChildren
   '/deliveries/new': typeof DeliveriesNewRoute
-  '/enquiries/$id': typeof EnquiriesIdRoute
+  '/enquiries/$id': typeof EnquiriesIdRouteWithChildren
   '/enquiries/new': typeof EnquiriesNewRoute
   '/finance/applications': typeof FinanceApplicationsRouteWithChildren
-  '/finance/refinance': typeof FinanceRefinanceRoute
-  '/insurance/$id': typeof InsuranceIdRoute
+  '/finance/refinance': typeof FinanceRefinanceRouteWithChildren
+  '/insurance/$id': typeof InsuranceIdRouteWithChildren
   '/insurance/new': typeof InsuranceNewRoute
-  '/inventory/$id': typeof InventoryIdRoute
+  '/inventory/$id': typeof InventoryIdRouteWithChildren
   '/inventory/new': typeof InventoryNewRoute
-  '/proforma/$id': typeof ProformaIdRoute
+  '/proforma/$id': typeof ProformaIdRouteWithChildren
   '/proforma/new': typeof ProformaNewRoute
-  '/registration/$id': typeof RegistrationIdRoute
+  '/registration/$id': typeof RegistrationIdRouteWithChildren
   '/registration/new': typeof RegistrationNewRoute
   '/settings/master-data': typeof SettingsMasterDataRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/settings/users': typeof SettingsUsersRoute
-  '/finance/applications/$id': typeof FinanceApplicationsIdRoute
+  '/bookings/$id/edit': typeof BookingsIdEditRoute
+  '/customers/$id/edit': typeof CustomersIdEditRoute
+  '/deliveries/$id/edit': typeof DeliveriesIdEditRoute
+  '/enquiries/$id/edit': typeof EnquiriesIdEditRoute
+  '/finance/applications/$id': typeof FinanceApplicationsIdRouteWithChildren
   '/finance/applications/new': typeof FinanceApplicationsNewRoute
+  '/finance/refinance/new': typeof FinanceRefinanceNewRoute
+  '/insurance/$id/edit': typeof InsuranceIdEditRoute
+  '/inventory/$id/edit': typeof InventoryIdEditRoute
+  '/proforma/$id/edit': typeof ProformaIdEditRoute
+  '/registration/$id/edit': typeof RegistrationIdEditRoute
+  '/finance/applications/$id/edit': typeof FinanceApplicationsIdEditRoute
+  '/finance/refinance/$id/edit': typeof FinanceRefinanceIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -388,6 +497,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/accounts/daily'
     | '/accounts/monthly'
+    | '/accounts/new'
     | '/bookings/$id'
     | '/bookings/new'
     | '/customers/$id'
@@ -409,8 +519,19 @@ export interface FileRouteTypes {
     | '/settings/master-data'
     | '/settings/roles'
     | '/settings/users'
+    | '/bookings/$id/edit'
+    | '/customers/$id/edit'
+    | '/deliveries/$id/edit'
+    | '/enquiries/$id/edit'
     | '/finance/applications/$id'
     | '/finance/applications/new'
+    | '/finance/refinance/new'
+    | '/insurance/$id/edit'
+    | '/inventory/$id/edit'
+    | '/proforma/$id/edit'
+    | '/registration/$id/edit'
+    | '/finance/applications/$id/edit'
+    | '/finance/refinance/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -429,6 +550,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/accounts/daily'
     | '/accounts/monthly'
+    | '/accounts/new'
     | '/bookings/$id'
     | '/bookings/new'
     | '/customers/$id'
@@ -450,8 +572,19 @@ export interface FileRouteTypes {
     | '/settings/master-data'
     | '/settings/roles'
     | '/settings/users'
+    | '/bookings/$id/edit'
+    | '/customers/$id/edit'
+    | '/deliveries/$id/edit'
+    | '/enquiries/$id/edit'
     | '/finance/applications/$id'
     | '/finance/applications/new'
+    | '/finance/refinance/new'
+    | '/insurance/$id/edit'
+    | '/inventory/$id/edit'
+    | '/proforma/$id/edit'
+    | '/registration/$id/edit'
+    | '/finance/applications/$id/edit'
+    | '/finance/refinance/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -470,6 +603,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/accounts/daily'
     | '/accounts/monthly'
+    | '/accounts/new'
     | '/bookings/$id'
     | '/bookings/new'
     | '/customers/$id'
@@ -491,8 +625,19 @@ export interface FileRouteTypes {
     | '/settings/master-data'
     | '/settings/roles'
     | '/settings/users'
+    | '/bookings/$id/edit'
+    | '/customers/$id/edit'
+    | '/deliveries/$id/edit'
+    | '/enquiries/$id/edit'
     | '/finance/applications/$id'
     | '/finance/applications/new'
+    | '/finance/refinance/new'
+    | '/insurance/$id/edit'
+    | '/inventory/$id/edit'
+    | '/proforma/$id/edit'
+    | '/registration/$id/edit'
+    | '/finance/applications/$id/edit'
+    | '/finance/refinance/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -624,6 +769,13 @@ declare module '@tanstack/react-router' {
       path: '/monthly'
       fullPath: '/accounts/monthly'
       preLoaderRoute: typeof AccountsMonthlyRouteImport
+      parentRoute: typeof AccountsRoute
+    }
+    '/accounts/new': {
+      id: '/accounts/new'
+      path: '/new'
+      fullPath: '/accounts/new'
+      preLoaderRoute: typeof AccountsNewRouteImport
       parentRoute: typeof AccountsRoute
     }
     '/bookings/$id': {
@@ -773,6 +925,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsUsersRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/bookings/$id/edit': {
+      id: '/bookings/$id/edit'
+      path: '/edit'
+      fullPath: '/bookings/$id/edit'
+      preLoaderRoute: typeof BookingsIdEditRouteImport
+      parentRoute: typeof BookingsIdRoute
+    }
+    '/customers/$id/edit': {
+      id: '/customers/$id/edit'
+      path: '/edit'
+      fullPath: '/customers/$id/edit'
+      preLoaderRoute: typeof CustomersIdEditRouteImport
+      parentRoute: typeof CustomersIdRoute
+    }
+    '/deliveries/$id/edit': {
+      id: '/deliveries/$id/edit'
+      path: '/edit'
+      fullPath: '/deliveries/$id/edit'
+      preLoaderRoute: typeof DeliveriesIdEditRouteImport
+      parentRoute: typeof DeliveriesIdRoute
+    }
+    '/enquiries/$id/edit': {
+      id: '/enquiries/$id/edit'
+      path: '/edit'
+      fullPath: '/enquiries/$id/edit'
+      preLoaderRoute: typeof EnquiriesIdEditRouteImport
+      parentRoute: typeof EnquiriesIdRoute
+    }
     '/finance/applications/$id': {
       id: '/finance/applications/$id'
       path: '/$id'
@@ -787,30 +967,93 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinanceApplicationsNewRouteImport
       parentRoute: typeof FinanceApplicationsRoute
     }
+    '/finance/refinance/new': {
+      id: '/finance/refinance/new'
+      path: '/new'
+      fullPath: '/finance/refinance/new'
+      preLoaderRoute: typeof FinanceRefinanceNewRouteImport
+      parentRoute: typeof FinanceRefinanceRoute
+    }
+    '/insurance/$id/edit': {
+      id: '/insurance/$id/edit'
+      path: '/edit'
+      fullPath: '/insurance/$id/edit'
+      preLoaderRoute: typeof InsuranceIdEditRouteImport
+      parentRoute: typeof InsuranceIdRoute
+    }
+    '/inventory/$id/edit': {
+      id: '/inventory/$id/edit'
+      path: '/edit'
+      fullPath: '/inventory/$id/edit'
+      preLoaderRoute: typeof InventoryIdEditRouteImport
+      parentRoute: typeof InventoryIdRoute
+    }
+    '/proforma/$id/edit': {
+      id: '/proforma/$id/edit'
+      path: '/edit'
+      fullPath: '/proforma/$id/edit'
+      preLoaderRoute: typeof ProformaIdEditRouteImport
+      parentRoute: typeof ProformaIdRoute
+    }
+    '/registration/$id/edit': {
+      id: '/registration/$id/edit'
+      path: '/edit'
+      fullPath: '/registration/$id/edit'
+      preLoaderRoute: typeof RegistrationIdEditRouteImport
+      parentRoute: typeof RegistrationIdRoute
+    }
+    '/finance/applications/$id/edit': {
+      id: '/finance/applications/$id/edit'
+      path: '/edit'
+      fullPath: '/finance/applications/$id/edit'
+      preLoaderRoute: typeof FinanceApplicationsIdEditRouteImport
+      parentRoute: typeof FinanceApplicationsIdRoute
+    }
+    '/finance/refinance/$id/edit': {
+      id: '/finance/refinance/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/finance/refinance/$id/edit'
+      preLoaderRoute: typeof FinanceRefinanceIdEditRouteImport
+      parentRoute: typeof FinanceRefinanceRoute
+    }
   }
 }
 
 interface AccountsRouteChildren {
   AccountsDailyRoute: typeof AccountsDailyRoute
   AccountsMonthlyRoute: typeof AccountsMonthlyRoute
+  AccountsNewRoute: typeof AccountsNewRoute
 }
 
 const AccountsRouteChildren: AccountsRouteChildren = {
   AccountsDailyRoute: AccountsDailyRoute,
   AccountsMonthlyRoute: AccountsMonthlyRoute,
+  AccountsNewRoute: AccountsNewRoute,
 }
 
 const AccountsRouteWithChildren = AccountsRoute._addFileChildren(
   AccountsRouteChildren,
 )
 
+interface BookingsIdRouteChildren {
+  BookingsIdEditRoute: typeof BookingsIdEditRoute
+}
+
+const BookingsIdRouteChildren: BookingsIdRouteChildren = {
+  BookingsIdEditRoute: BookingsIdEditRoute,
+}
+
+const BookingsIdRouteWithChildren = BookingsIdRoute._addFileChildren(
+  BookingsIdRouteChildren,
+)
+
 interface BookingsRouteChildren {
-  BookingsIdRoute: typeof BookingsIdRoute
+  BookingsIdRoute: typeof BookingsIdRouteWithChildren
   BookingsNewRoute: typeof BookingsNewRoute
 }
 
 const BookingsRouteChildren: BookingsRouteChildren = {
-  BookingsIdRoute: BookingsIdRoute,
+  BookingsIdRoute: BookingsIdRouteWithChildren,
   BookingsNewRoute: BookingsNewRoute,
 }
 
@@ -818,13 +1061,25 @@ const BookingsRouteWithChildren = BookingsRoute._addFileChildren(
   BookingsRouteChildren,
 )
 
+interface CustomersIdRouteChildren {
+  CustomersIdEditRoute: typeof CustomersIdEditRoute
+}
+
+const CustomersIdRouteChildren: CustomersIdRouteChildren = {
+  CustomersIdEditRoute: CustomersIdEditRoute,
+}
+
+const CustomersIdRouteWithChildren = CustomersIdRoute._addFileChildren(
+  CustomersIdRouteChildren,
+)
+
 interface CustomersRouteChildren {
-  CustomersIdRoute: typeof CustomersIdRoute
+  CustomersIdRoute: typeof CustomersIdRouteWithChildren
   CustomersNewRoute: typeof CustomersNewRoute
 }
 
 const CustomersRouteChildren: CustomersRouteChildren = {
-  CustomersIdRoute: CustomersIdRoute,
+  CustomersIdRoute: CustomersIdRouteWithChildren,
   CustomersNewRoute: CustomersNewRoute,
 }
 
@@ -832,13 +1087,25 @@ const CustomersRouteWithChildren = CustomersRoute._addFileChildren(
   CustomersRouteChildren,
 )
 
+interface DeliveriesIdRouteChildren {
+  DeliveriesIdEditRoute: typeof DeliveriesIdEditRoute
+}
+
+const DeliveriesIdRouteChildren: DeliveriesIdRouteChildren = {
+  DeliveriesIdEditRoute: DeliveriesIdEditRoute,
+}
+
+const DeliveriesIdRouteWithChildren = DeliveriesIdRoute._addFileChildren(
+  DeliveriesIdRouteChildren,
+)
+
 interface DeliveriesRouteChildren {
-  DeliveriesIdRoute: typeof DeliveriesIdRoute
+  DeliveriesIdRoute: typeof DeliveriesIdRouteWithChildren
   DeliveriesNewRoute: typeof DeliveriesNewRoute
 }
 
 const DeliveriesRouteChildren: DeliveriesRouteChildren = {
-  DeliveriesIdRoute: DeliveriesIdRoute,
+  DeliveriesIdRoute: DeliveriesIdRouteWithChildren,
   DeliveriesNewRoute: DeliveriesNewRoute,
 }
 
@@ -846,13 +1113,25 @@ const DeliveriesRouteWithChildren = DeliveriesRoute._addFileChildren(
   DeliveriesRouteChildren,
 )
 
+interface EnquiriesIdRouteChildren {
+  EnquiriesIdEditRoute: typeof EnquiriesIdEditRoute
+}
+
+const EnquiriesIdRouteChildren: EnquiriesIdRouteChildren = {
+  EnquiriesIdEditRoute: EnquiriesIdEditRoute,
+}
+
+const EnquiriesIdRouteWithChildren = EnquiriesIdRoute._addFileChildren(
+  EnquiriesIdRouteChildren,
+)
+
 interface EnquiriesRouteChildren {
-  EnquiriesIdRoute: typeof EnquiriesIdRoute
+  EnquiriesIdRoute: typeof EnquiriesIdRouteWithChildren
   EnquiriesNewRoute: typeof EnquiriesNewRoute
 }
 
 const EnquiriesRouteChildren: EnquiriesRouteChildren = {
-  EnquiriesIdRoute: EnquiriesIdRoute,
+  EnquiriesIdRoute: EnquiriesIdRouteWithChildren,
   EnquiriesNewRoute: EnquiriesNewRoute,
 }
 
@@ -860,39 +1139,77 @@ const EnquiriesRouteWithChildren = EnquiriesRoute._addFileChildren(
   EnquiriesRouteChildren,
 )
 
+interface FinanceApplicationsIdRouteChildren {
+  FinanceApplicationsIdEditRoute: typeof FinanceApplicationsIdEditRoute
+}
+
+const FinanceApplicationsIdRouteChildren: FinanceApplicationsIdRouteChildren = {
+  FinanceApplicationsIdEditRoute: FinanceApplicationsIdEditRoute,
+}
+
+const FinanceApplicationsIdRouteWithChildren =
+  FinanceApplicationsIdRoute._addFileChildren(
+    FinanceApplicationsIdRouteChildren,
+  )
+
 interface FinanceApplicationsRouteChildren {
-  FinanceApplicationsIdRoute: typeof FinanceApplicationsIdRoute
+  FinanceApplicationsIdRoute: typeof FinanceApplicationsIdRouteWithChildren
   FinanceApplicationsNewRoute: typeof FinanceApplicationsNewRoute
 }
 
 const FinanceApplicationsRouteChildren: FinanceApplicationsRouteChildren = {
-  FinanceApplicationsIdRoute: FinanceApplicationsIdRoute,
+  FinanceApplicationsIdRoute: FinanceApplicationsIdRouteWithChildren,
   FinanceApplicationsNewRoute: FinanceApplicationsNewRoute,
 }
 
 const FinanceApplicationsRouteWithChildren =
   FinanceApplicationsRoute._addFileChildren(FinanceApplicationsRouteChildren)
 
+interface FinanceRefinanceRouteChildren {
+  FinanceRefinanceNewRoute: typeof FinanceRefinanceNewRoute
+  FinanceRefinanceIdEditRoute: typeof FinanceRefinanceIdEditRoute
+}
+
+const FinanceRefinanceRouteChildren: FinanceRefinanceRouteChildren = {
+  FinanceRefinanceNewRoute: FinanceRefinanceNewRoute,
+  FinanceRefinanceIdEditRoute: FinanceRefinanceIdEditRoute,
+}
+
+const FinanceRefinanceRouteWithChildren =
+  FinanceRefinanceRoute._addFileChildren(FinanceRefinanceRouteChildren)
+
 interface FinanceRouteChildren {
   FinanceApplicationsRoute: typeof FinanceApplicationsRouteWithChildren
-  FinanceRefinanceRoute: typeof FinanceRefinanceRoute
+  FinanceRefinanceRoute: typeof FinanceRefinanceRouteWithChildren
 }
 
 const FinanceRouteChildren: FinanceRouteChildren = {
   FinanceApplicationsRoute: FinanceApplicationsRouteWithChildren,
-  FinanceRefinanceRoute: FinanceRefinanceRoute,
+  FinanceRefinanceRoute: FinanceRefinanceRouteWithChildren,
 }
 
 const FinanceRouteWithChildren =
   FinanceRoute._addFileChildren(FinanceRouteChildren)
 
+interface InsuranceIdRouteChildren {
+  InsuranceIdEditRoute: typeof InsuranceIdEditRoute
+}
+
+const InsuranceIdRouteChildren: InsuranceIdRouteChildren = {
+  InsuranceIdEditRoute: InsuranceIdEditRoute,
+}
+
+const InsuranceIdRouteWithChildren = InsuranceIdRoute._addFileChildren(
+  InsuranceIdRouteChildren,
+)
+
 interface InsuranceRouteChildren {
-  InsuranceIdRoute: typeof InsuranceIdRoute
+  InsuranceIdRoute: typeof InsuranceIdRouteWithChildren
   InsuranceNewRoute: typeof InsuranceNewRoute
 }
 
 const InsuranceRouteChildren: InsuranceRouteChildren = {
-  InsuranceIdRoute: InsuranceIdRoute,
+  InsuranceIdRoute: InsuranceIdRouteWithChildren,
   InsuranceNewRoute: InsuranceNewRoute,
 }
 
@@ -900,13 +1217,25 @@ const InsuranceRouteWithChildren = InsuranceRoute._addFileChildren(
   InsuranceRouteChildren,
 )
 
+interface InventoryIdRouteChildren {
+  InventoryIdEditRoute: typeof InventoryIdEditRoute
+}
+
+const InventoryIdRouteChildren: InventoryIdRouteChildren = {
+  InventoryIdEditRoute: InventoryIdEditRoute,
+}
+
+const InventoryIdRouteWithChildren = InventoryIdRoute._addFileChildren(
+  InventoryIdRouteChildren,
+)
+
 interface InventoryRouteChildren {
-  InventoryIdRoute: typeof InventoryIdRoute
+  InventoryIdRoute: typeof InventoryIdRouteWithChildren
   InventoryNewRoute: typeof InventoryNewRoute
 }
 
 const InventoryRouteChildren: InventoryRouteChildren = {
-  InventoryIdRoute: InventoryIdRoute,
+  InventoryIdRoute: InventoryIdRouteWithChildren,
   InventoryNewRoute: InventoryNewRoute,
 }
 
@@ -914,13 +1243,25 @@ const InventoryRouteWithChildren = InventoryRoute._addFileChildren(
   InventoryRouteChildren,
 )
 
+interface ProformaIdRouteChildren {
+  ProformaIdEditRoute: typeof ProformaIdEditRoute
+}
+
+const ProformaIdRouteChildren: ProformaIdRouteChildren = {
+  ProformaIdEditRoute: ProformaIdEditRoute,
+}
+
+const ProformaIdRouteWithChildren = ProformaIdRoute._addFileChildren(
+  ProformaIdRouteChildren,
+)
+
 interface ProformaRouteChildren {
-  ProformaIdRoute: typeof ProformaIdRoute
+  ProformaIdRoute: typeof ProformaIdRouteWithChildren
   ProformaNewRoute: typeof ProformaNewRoute
 }
 
 const ProformaRouteChildren: ProformaRouteChildren = {
-  ProformaIdRoute: ProformaIdRoute,
+  ProformaIdRoute: ProformaIdRouteWithChildren,
   ProformaNewRoute: ProformaNewRoute,
 }
 
@@ -928,13 +1269,25 @@ const ProformaRouteWithChildren = ProformaRoute._addFileChildren(
   ProformaRouteChildren,
 )
 
+interface RegistrationIdRouteChildren {
+  RegistrationIdEditRoute: typeof RegistrationIdEditRoute
+}
+
+const RegistrationIdRouteChildren: RegistrationIdRouteChildren = {
+  RegistrationIdEditRoute: RegistrationIdEditRoute,
+}
+
+const RegistrationIdRouteWithChildren = RegistrationIdRoute._addFileChildren(
+  RegistrationIdRouteChildren,
+)
+
 interface RegistrationRouteChildren {
-  RegistrationIdRoute: typeof RegistrationIdRoute
+  RegistrationIdRoute: typeof RegistrationIdRouteWithChildren
   RegistrationNewRoute: typeof RegistrationNewRoute
 }
 
 const RegistrationRouteChildren: RegistrationRouteChildren = {
-  RegistrationIdRoute: RegistrationIdRoute,
+  RegistrationIdRoute: RegistrationIdRouteWithChildren,
   RegistrationNewRoute: RegistrationNewRoute,
 }
 

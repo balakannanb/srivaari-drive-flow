@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RefinancePage } from "@/components/pages";
 
-export const Route = createFileRoute("/finance/refinance")({
+export const Route = createFileRoute("/finance/refinance/")({
   head: () => ({ meta: [
     { title: "Refinance — SRIVAARI AUTOMOBILES" },
     { name: "description", content: "Manage refinance enquiries and applications." },

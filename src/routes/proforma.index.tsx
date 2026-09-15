@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ListPage } from "@/components/pages";
 
-export const Route = createFileRoute("/proforma")({
+export const Route = createFileRoute("/proforma/")({
   head: () => ({ meta: [
     { title: "Proforma Invoices — SRIVAARI AUTOMOBILES" },
     { name: "description", content: "Create and manage vehicle proforma invoices." },

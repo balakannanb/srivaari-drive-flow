@@ -268,7 +268,7 @@ export function RecordFormPage({ module, mode = "new", id }: { module: FormModul
     />
 
     <form onSubmit={submit} className="space-y-5">
-      {hasCustomerSection && mode === "new" && <GlassCard className="p-6">
+      {hasCustomerSection && mode === "new" && <GlassCard className="ambient-highlight p-6">
         <h2 className="font-display text-lg font-bold">Find existing customer</h2>
         <p className="mt-1 text-sm text-muted-foreground">Search by phone or name so details never need retyping.</p>
         <div className="relative mt-4">
@@ -282,7 +282,7 @@ export function RecordFormPage({ module, mode = "new", id }: { module: FormModul
         </div>}
       </GlassCard>}
 
-      {config.sections.map((section) => <GlassCard key={section.title} className="p-6">
+      {config.sections.map((section) => <GlassCard key={section.title} className="p-6 lg:p-7">
         <h2 className="font-display text-lg font-bold">{section.title}</h2>
         {section.description && <p className="mt-1 text-sm text-muted-foreground">{section.description}</p>}
         <div className="mt-5 grid gap-5 md:grid-cols-2">
@@ -292,9 +292,9 @@ export function RecordFormPage({ module, mode = "new", id }: { module: FormModul
 
       <GlassCard className="p-6">
         <h2 className="font-display text-lg font-bold">Documents</h2>
-        <button type="button" onClick={() => toast.success("Document attached")} className="mt-4 flex h-24 w-full items-center justify-center rounded-xl border border-dashed border-primary/30 bg-primary-soft text-sm font-semibold text-primary">
+        <Button type="button" variant="outline" onClick={() => toast.success("Document attached")} className="mt-4 h-24 w-full border-dashed border-primary/30 bg-primary-soft/70 text-primary hover:bg-primary-soft">
           <Upload className="mr-2 size-4"/> Upload supporting documents
-        </button>
+        </Button>
       </GlassCard>
 
       <div className="flex flex-wrap justify-end gap-2">

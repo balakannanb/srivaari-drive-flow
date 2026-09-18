@@ -35,6 +35,31 @@ const customerSection: Section = {
   ],
 };
 
+const newCustomerSection: Section = {
+  title: "New customer",
+  description: "These details are saved as a new customer record automatically when the booking is created.",
+  fields: [
+    { name: "customerName", label: "Customer name", required: true, placeholder: "Full name" },
+    { name: "customerPhone", label: "Phone number", type: "tel", required: true, placeholder: "10-digit mobile number" },
+    { name: "customerEmail", label: "Email", type: "email", placeholder: "name@example.com" },
+    { name: "customerCity", label: "City / area", placeholder: "Velachery, Chennai" },
+    { name: "customerAddress", label: "Address", placeholder: "Door number, street and area", full: true },
+  ],
+};
+
+const requirementVehicleSection: Section = {
+  title: "Vehicle requirement",
+  description: "Vehicle is not in stock — it will be added to inventory marked as a requirement.",
+  fields: [
+    { name: "model", label: "Model", required: true, placeholder: "Yamaha FZ-S" },
+    { name: "variant", label: "Variant", placeholder: "FI V4" },
+    { name: "colour", label: "Colour", placeholder: "Racing Blue" },
+    { name: "expectedPrice", label: "Expected selling price", type: "number", placeholder: "132000" },
+    { name: "expectedArrival", label: "Expected stock arrival", type: "date" },
+    { name: "requirementNotes", label: "Requirement notes", type: "textarea", placeholder: "Customer preference, alternate colours...", full: true },
+  ],
+};
+
 const moduleConfig: Record<FormModule, { singular: string; listTo: ListTo; idPrefix: string; sections: Section[] }> = {
   customer: {
     singular: "Customer", listTo: "/customers", idPrefix: "CUS",

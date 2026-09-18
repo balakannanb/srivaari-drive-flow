@@ -54,6 +54,41 @@ export const records: Record<string, RecordRow[]> = {
   ],
 };
 
+const pad = (value: number) => String(value).padStart(5, "0");
+
+export function addCustomer(input: { name: string; phone: string; email?: string; address?: string; location?: string }): Customer {
+  const existing = customers.find((entry) => entry.phone === input.phone);
+  if (existing) return existing;
+  const customer: Customer = {
+    id: `CUS-${pad(customers.length + 126)}`,
+    name: input.name,
+    phone: input.phone,
+    email: input.email || "",
+    location: input.location || "Chennai",
+    address: input.address || "",
+    stage: "Booking",
+    lastActivity: "Just now",
+  };
+  customers.unshift(customer);
+  return customer;
+}
+
+export function addVehicleRequirement(input: { model: string; variant?: string; colour?: string; sellingPrice?: number }): Vehicle {
+  const vehicle: Vehicle = {
+    id: `VEH-${2405 + vehicles.length}`,
+    model: input.model,
+    variant: input.variant || "—",
+    colour: input.colour || "—",
+    chassis: "Awaiting stock",
+    engine: "Awaiting stock",
+    purchasePrice: 0,
+    sellingPrice: input.sellingPrice || 0,
+    status: "Requirement",
+  };
+  vehicles.unshift(vehicle);
+  return vehicle;
+}
+
 export const searchRecords: SearchRecord[] = [
   { type: "CUSTOMER", id: "CUS-00125", title: "Ravi Kumar", subtitle: "9876543210 · Chennai", href: "/customers/CUS-00125" },
   { type: "BOOKING", id: "BK-2026-00125", title: "BK-2026-00125", subtitle: "Ravi Kumar · TVS Jupiter ZX", href: "/bookings/BK-2026-00125" },

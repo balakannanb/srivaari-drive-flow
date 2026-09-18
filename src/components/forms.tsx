@@ -267,22 +267,59 @@ function Field({ field, value, onChange }: { field: FieldDef; value: string; onC
   </div>;
 }
 
+function ModeToggle({ value, onChange, options }: { value: string; onChange: (next: string) => void; options: { key: string; label: string }[] }) {
+  return <div className="inline-flex rounded-xl border border-border bg-card/70 p-1 backdrop-blur-sm">
+    {options.map((option) => <Button key={option.key} type="button" size="sm" variant={value === option.key ? "default" : "ghost"} onClick={() => onChange(option.key)}>{option.label}</Button>)}
+  </div>;
+}
+
 export function RecordFormPage({ module, mode = "new", id }: { module: FormModule; mode?: "new" | "edit"; id?: string }) {
   const config = moduleConfig[module];
   const navigate = useNavigate();
   const initial = useMemo(() => defaultsFor(module, id), [module, id]);
   const [values, setValues] = useState<Record<string, string>>(initial);
   const [lookup, setLookup] = useState("");
+  const [customerMode, setCustomerMode] = useState<"existing" | "new">("existing");
+  const [stockMode, setStockMode] = useState<"stock" | "requirement">("stock");
+  const [stockVehicleId, setStockVehicleId] = useState("");
+
+  const isBookingNew = module === "booking" && mode === "new";
+  const inStock = useMemo(() => vehicles.filter((vehicle) => ["Available", "Reserved", "In Transit"].includes(vehicle.status)), []);
 
   const matched = lookup.length >= 4 ? customers.find((entry) => entry.phone.includes(lookup) || entry.name.toLowerCase().includes(lookup.toLowerCase())) : undefined;
-  const hasCustomerSection = config.sections.some((section) => section.title === "Customer");
+  const sections = useMemo(() => {
+    if (!isBookingNew) return config.sections;
+    const [, vehicleSection, paymentSection] = config.sections;
+    return [
+      customerMode === "new" ? newCustomerSection : customerSection,
+      stockMode === "requirement" ? requirementVehicleSection : vehicleSection!,
+      paymentSection!,
+    ];
+  }, [config.sections, customerMode, isBookingNew, stockMode]);
+  const hasCustomerSection = sections.some((section) => section.title === "Customer");
   const set = (name: string, next: string) => setValues((current) => ({ ...current, [name]: next }));
+
+  const pickStockVehicle = (vehicleId: string) => {
+    setStockVehicleId(vehicleId);
+    const vehicle = vehicles.find((entry) => entry.id === vehicleId);
+    if (!vehicle) return;
+    setValues((current) => ({ ...current, model: vehicle.model, variant: vehicle.variant, colour: vehicle.colour, chassis: vehicle.chassis, onRoad: String(vehicle.sellingPrice) }));
+  };
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
+    if (isBookingNew && customerMode === "new" && values.customerName && values.customerPhone) {
+      const created = addCustomer({ name: values.customerName, phone: values.customerPhone, email: values.customerEmail, address: values.customerAddress, location: values.customerCity });
+      toast.success(`New customer ${created.id} created for ${created.name}`);
+    }
+    if (isBookingNew && stockMode === "requirement" && values.model) {
+      const requirement = addVehicleRequirement({ model: values.model, variant: values.variant, colour: values.colour, sellingPrice: Number(values.expectedPrice || 0) });
+      toast.success(`${requirement.model} added to inventory as a requirement`);
+    }
     toast.success(mode === "edit" ? `${config.singular} ${id ?? ""} updated` : `${config.singular} created successfully`);
     navigate({ to: config.listTo });
   };
+
 
   return <div className="mx-auto max-w-5xl space-y-6">
     <PageHeader

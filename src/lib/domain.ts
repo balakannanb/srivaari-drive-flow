@@ -56,7 +56,7 @@ export const toneForStatus = (status: string): Tone => {
   const value = status.toLowerCase();
   if (["approved", "completed", "delivered", "available", "issued", "active", "ready"].some((word) => value.includes(word))) return "success";
   if (["rejected", "lost", "blocked", "overdue"].some((word) => value.includes(word))) return "danger";
-  if (["pending", "review", "processing", "submitted", "reserved", "transit"].some((word) => value.includes(word))) return "warning";
+  if (["pending", "review", "processing", "submitted", "reserved", "transit", "requirement", "awaiting stock"].some((word) => value.includes(word))) return "warning";
   if (["finance", "booked", "open", "enquiry", "draft"].some((word) => value.includes(word))) return "info";
   return "neutral";
 };

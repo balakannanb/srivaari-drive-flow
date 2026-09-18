@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GlassCard, PageHeader } from "@/components/shared";
-import { customers, records, vehicles } from "@/lib/mock-service";
+import { addCustomer, addVehicleRequirement, customers, records, vehicles } from "@/lib/mock-service";
 
 type FieldType = "text" | "tel" | "email" | "date" | "number" | "select" | "textarea";
 type FieldDef = { name: string; label: string; type?: FieldType; placeholder?: string; options?: string[]; required?: boolean; full?: boolean };
@@ -32,6 +32,31 @@ const customerSection: Section = {
   fields: [
     { name: "customerPhone", label: "Customer phone", type: "tel", placeholder: "10-digit mobile number", required: true },
     { name: "customerName", label: "Customer name", placeholder: "Full name", required: true },
+  ],
+};
+
+const newCustomerSection: Section = {
+  title: "New customer",
+  description: "These details are saved as a new customer record automatically when the booking is created.",
+  fields: [
+    { name: "customerName", label: "Customer name", required: true, placeholder: "Full name" },
+    { name: "customerPhone", label: "Phone number", type: "tel", required: true, placeholder: "10-digit mobile number" },
+    { name: "customerEmail", label: "Email", type: "email", placeholder: "name@example.com" },
+    { name: "customerCity", label: "City / area", placeholder: "Velachery, Chennai" },
+    { name: "customerAddress", label: "Address", placeholder: "Door number, street and area", full: true },
+  ],
+};
+
+const requirementVehicleSection: Section = {
+  title: "Vehicle requirement",
+  description: "Vehicle is not in stock — it will be added to inventory marked as a requirement.",
+  fields: [
+    { name: "model", label: "Model", required: true, placeholder: "Yamaha FZ-S" },
+    { name: "variant", label: "Variant", placeholder: "FI V4" },
+    { name: "colour", label: "Colour", placeholder: "Racing Blue" },
+    { name: "expectedPrice", label: "Expected selling price", type: "number", placeholder: "132000" },
+    { name: "expectedArrival", label: "Expected stock arrival", type: "date" },
+    { name: "requirementNotes", label: "Requirement notes", type: "textarea", placeholder: "Customer preference, alternate colours...", full: true },
   ],
 };
 
@@ -242,22 +267,59 @@ function Field({ field, value, onChange }: { field: FieldDef; value: string; onC
   </div>;
 }
 
+function ModeToggle({ value, onChange, options }: { value: string; onChange: (next: string) => void; options: { key: string; label: string }[] }) {
+  return <div className="inline-flex rounded-xl border border-border bg-card/70 p-1 backdrop-blur-sm">
+    {options.map((option) => <Button key={option.key} type="button" size="sm" variant={value === option.key ? "default" : "ghost"} onClick={() => onChange(option.key)}>{option.label}</Button>)}
+  </div>;
+}
+
 export function RecordFormPage({ module, mode = "new", id }: { module: FormModule; mode?: "new" | "edit"; id?: string }) {
   const config = moduleConfig[module];
   const navigate = useNavigate();
   const initial = useMemo(() => defaultsFor(module, id), [module, id]);
   const [values, setValues] = useState<Record<string, string>>(initial);
   const [lookup, setLookup] = useState("");
+  const [customerMode, setCustomerMode] = useState<"existing" | "new">("existing");
+  const [stockMode, setStockMode] = useState<"stock" | "requirement">("stock");
+  const [stockVehicleId, setStockVehicleId] = useState("");
+
+  const isBookingNew = module === "booking" && mode === "new";
+  const inStock = useMemo(() => vehicles.filter((vehicle) => ["Available", "Reserved", "In Transit"].includes(vehicle.status)), []);
 
   const matched = lookup.length >= 4 ? customers.find((entry) => entry.phone.includes(lookup) || entry.name.toLowerCase().includes(lookup.toLowerCase())) : undefined;
-  const hasCustomerSection = config.sections.some((section) => section.title === "Customer");
+  const sections = useMemo(() => {
+    if (!isBookingNew) return config.sections;
+    const [, vehicleSection, paymentSection] = config.sections;
+    return [
+      customerMode === "new" ? newCustomerSection : customerSection,
+      stockMode === "requirement" ? requirementVehicleSection : vehicleSection!,
+      paymentSection!,
+    ];
+  }, [config.sections, customerMode, isBookingNew, stockMode]);
+  const hasCustomerSection = sections.some((section) => section.title === "Customer");
   const set = (name: string, next: string) => setValues((current) => ({ ...current, [name]: next }));
+
+  const pickStockVehicle = (vehicleId: string) => {
+    setStockVehicleId(vehicleId);
+    const vehicle = vehicles.find((entry) => entry.id === vehicleId);
+    if (!vehicle) return;
+    setValues((current) => ({ ...current, model: vehicle.model, variant: vehicle.variant, colour: vehicle.colour, chassis: vehicle.chassis, onRoad: String(vehicle.sellingPrice) }));
+  };
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
+    if (isBookingNew && customerMode === "new" && values.customerName && values.customerPhone) {
+      const created = addCustomer({ name: values.customerName, phone: values.customerPhone, email: values.customerEmail, address: values.customerAddress, location: values.customerCity });
+      toast.success(`New customer ${created.id} created for ${created.name}`);
+    }
+    if (isBookingNew && stockMode === "requirement" && values.model) {
+      const requirement = addVehicleRequirement({ model: values.model, variant: values.variant, colour: values.colour, sellingPrice: Number(values.expectedPrice || 0) });
+      toast.success(`${requirement.model} added to inventory as a requirement`);
+    }
     toast.success(mode === "edit" ? `${config.singular} ${id ?? ""} updated` : `${config.singular} created successfully`);
     navigate({ to: config.listTo });
   };
+
 
   return <div className="mx-auto max-w-5xl space-y-6">
     <PageHeader
@@ -268,7 +330,12 @@ export function RecordFormPage({ module, mode = "new", id }: { module: FormModul
     />
 
     <form onSubmit={submit} className="space-y-5">
-      {hasCustomerSection && mode === "new" && <GlassCard className="ambient-highlight p-6">
+      {isBookingNew && <GlassCard className="ambient-highlight flex flex-wrap items-center justify-between gap-4 p-5">
+        <div><p className="font-display font-bold">Who is this booking for?</p><p className="text-sm text-muted-foreground">Pick a saved customer, or enter a new one — we create the customer record automatically.</p></div>
+        <ModeToggle value={customerMode} onChange={(next) => setCustomerMode(next as "existing" | "new")} options={[{ key: "existing", label: "Existing customer" }, { key: "new", label: "New customer" }]}/>
+      </GlassCard>}
+
+      {hasCustomerSection && mode === "new" && (!isBookingNew || customerMode === "existing") && <GlassCard className="ambient-highlight p-6">
         <h2 className="font-display text-lg font-bold">Find existing customer</h2>
         <p className="mt-1 text-sm text-muted-foreground">Search by phone or name so details never need retyping.</p>
         <div className="relative mt-4">
@@ -282,13 +349,26 @@ export function RecordFormPage({ module, mode = "new", id }: { module: FormModul
         </div>}
       </GlassCard>}
 
-      {config.sections.map((section) => <GlassCard key={section.title} className="p-6 lg:p-7">
-        <h2 className="font-display text-lg font-bold">{section.title}</h2>
-        {section.description && <p className="mt-1 text-sm text-muted-foreground">{section.description}</p>}
-        <div className="mt-5 grid gap-5 md:grid-cols-2">
-          {section.fields.map((field) => <Field key={field.name} field={field} value={values[field.name] ?? ""} onChange={(next) => set(field.name, next)}/>)}
-        </div>
-      </GlassCard>)}
+      {sections.map((section) => <div key={section.title} className="space-y-5">
+        {isBookingNew && (section.title === "Vehicle" || section.title === "Vehicle requirement") && <GlassCard className="ambient-highlight flex flex-wrap items-center justify-between gap-4 p-5">
+          <div><p className="font-display font-bold">Vehicle availability</p><p className="text-sm text-muted-foreground">Choose from showroom stock, or raise a requirement when the bike is unavailable.</p></div>
+          <ModeToggle value={stockMode} onChange={(next) => setStockMode(next as "stock" | "requirement")} options={[{ key: "stock", label: "From stock" }, { key: "requirement", label: "Not in stock" }]}/>
+        </GlassCard>}
+        <GlassCard className="p-6 lg:p-7">
+          <h2 className="font-display text-lg font-bold">{section.title}</h2>
+          {section.description && <p className="mt-1 text-sm text-muted-foreground">{section.description}</p>}
+          {isBookingNew && stockMode === "stock" && section.title === "Vehicle" && <div className="mt-5 grid gap-2">
+            <span className="text-sm font-semibold text-foreground">Select available vehicle<span className="ml-1 text-destructive">*</span></span>
+            <Select value={stockVehicleId || undefined} onValueChange={pickStockVehicle}>
+              <SelectTrigger><SelectValue placeholder="Choose a vehicle from inventory"/></SelectTrigger>
+              <SelectContent>{inStock.map((vehicle) => <SelectItem key={vehicle.id} value={vehicle.id}>{vehicle.model} · {vehicle.variant} · {vehicle.colour} ({vehicle.status})</SelectItem>)}</SelectContent>
+            </Select>
+          </div>}
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            {section.fields.map((field) => <Field key={field.name} field={field} value={values[field.name] ?? ""} onChange={(next) => set(field.name, next)}/>)}
+          </div>
+        </GlassCard>
+      </div>)}
 
       <GlassCard className="p-6">
         <h2 className="font-display text-lg font-bold">Documents</h2>

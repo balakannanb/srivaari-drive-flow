@@ -14,9 +14,24 @@ import { customers, records, vehicles } from "@/lib/mock-service";
 import { formatCurrency } from "@/lib/domain";
 import { EditLink, GlassCard, JourneyStepper, KpiCard, ModernTable, PageHeader, StatusBadge } from "@/components/shared";
 
-const filters = ["All", "Today", "Pending", "Approved", "Completed"];
-function FilterPills() { const [active, setActive] = useState("All"); return <div className="flex gap-2 overflow-x-auto pb-1">{filters.map((item) => <Button key={item} variant={active === item ? "default" : "outline"} size="sm" onClick={() => setActive(item)}>{item}</Button>)}</div>; }
-const chartData = [{ day: "Mon", income: 95, expense: 18 }, { day: "Tue", income: 140, expense: 32 }, { day: "Wed", income: 82, expense: 21 }, { day: "Thu", income: 185, expense: 23 }, { day: "Fri", income: 164, expense: 28 }, { day: "Sat", income: 210, expense: 40 }];
+function FilterPills({ options, active, onChange }: { options: string[]; active: string; onChange: (next: string) => void }) {
+  return <div className="flex gap-2 overflow-x-auto pb-1">{options.map((item) => <Button key={item} variant={active === item ? "default" : "outline"} size="sm" onClick={() => onChange(item)}>{item}</Button>)}</div>;
+}
+
+export const pageFilters = {
+  enquiries: ["All", "Open", "Follow-up Due", "Converted", "Lost"],
+  proforma: ["All", "Draft", "Sent", "Accepted", "Expired"],
+  bookings: ["All", "Booked", "Finance Pending", "Insurance Pending", "Registration Pending", "Ready for Delivery", "Delivered"],
+  finance: ["All", "Submitted", "Under Review", "Approved", "Rejected", "Disbursed"],
+  refinance: ["All", "Documents Pending", "Submitted", "Approved", "Rejected", "Disbursed"],
+  insurance: ["All", "Requested", "Quote Received", "Policy Issued", "Expired"],
+  registration: ["All", "Documents Pending", "Submitted", "Processing", "Number Allotted", "Completed"],
+  deliveries: ["All", "Scheduled", "Ready", "Blocked", "Delivered"],
+  customers: ["All", "Enquiry", "Booking", "Finance", "Registration", "Delivered"],
+  inventory: ["All", "Available", "Reserved", "Booked", "In Transit", "Requirement", "Delivered"],
+} as const;
+
+const AccountsChart = lazy(() => import("@/components/accounts-chart"));
 
 export function DashboardPage() {
   const pipeline = [["Enquiry", 18, "/enquiries"], ["Proforma", 14, "/proforma"], ["Booking", 12, "/bookings"], ["Payment", 9, "/bookings"], ["Finance", 5, "/finance"], ["Insurance", 7, "/insurance"], ["Registration", 9, "/registration"], ["Delivery", 4, "/deliveries"]] as const;

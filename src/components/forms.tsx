@@ -330,7 +330,12 @@ export function RecordFormPage({ module, mode = "new", id }: { module: FormModul
     />
 
     <form onSubmit={submit} className="space-y-5">
-      {hasCustomerSection && mode === "new" && <GlassCard className="ambient-highlight p-6">
+      {isBookingNew && <GlassCard className="ambient-highlight flex flex-wrap items-center justify-between gap-4 p-5">
+        <div><p className="font-display font-bold">Who is this booking for?</p><p className="text-sm text-muted-foreground">Pick a saved customer, or enter a new one — we create the customer record automatically.</p></div>
+        <ModeToggle value={customerMode} onChange={(next) => setCustomerMode(next as "existing" | "new")} options={[{ key: "existing", label: "Existing customer" }, { key: "new", label: "New customer" }]}/>
+      </GlassCard>}
+
+      {hasCustomerSection && mode === "new" && (!isBookingNew || customerMode === "existing") && <GlassCard className="ambient-highlight p-6">
         <h2 className="font-display text-lg font-bold">Find existing customer</h2>
         <p className="mt-1 text-sm text-muted-foreground">Search by phone or name so details never need retyping.</p>
         <div className="relative mt-4">
@@ -344,13 +349,26 @@ export function RecordFormPage({ module, mode = "new", id }: { module: FormModul
         </div>}
       </GlassCard>}
 
-      {config.sections.map((section) => <GlassCard key={section.title} className="p-6 lg:p-7">
-        <h2 className="font-display text-lg font-bold">{section.title}</h2>
-        {section.description && <p className="mt-1 text-sm text-muted-foreground">{section.description}</p>}
-        <div className="mt-5 grid gap-5 md:grid-cols-2">
-          {section.fields.map((field) => <Field key={field.name} field={field} value={values[field.name] ?? ""} onChange={(next) => set(field.name, next)}/>)}
-        </div>
-      </GlassCard>)}
+      {sections.map((section) => <div key={section.title} className="space-y-5">
+        {isBookingNew && (section.title === "Vehicle" || section.title === "Vehicle requirement") && <GlassCard className="ambient-highlight flex flex-wrap items-center justify-between gap-4 p-5">
+          <div><p className="font-display font-bold">Vehicle availability</p><p className="text-sm text-muted-foreground">Choose from showroom stock, or raise a requirement when the bike is unavailable.</p></div>
+          <ModeToggle value={stockMode} onChange={(next) => setStockMode(next as "stock" | "requirement")} options={[{ key: "stock", label: "From stock" }, { key: "requirement", label: "Not in stock" }]}/>
+        </GlassCard>}
+        <GlassCard className="p-6 lg:p-7">
+          <h2 className="font-display text-lg font-bold">{section.title}</h2>
+          {section.description && <p className="mt-1 text-sm text-muted-foreground">{section.description}</p>}
+          {isBookingNew && stockMode === "stock" && section.title === "Vehicle" && <div className="mt-5 grid gap-2">
+            <span className="text-sm font-semibold text-foreground">Select available vehicle<span className="ml-1 text-destructive">*</span></span>
+            <Select value={stockVehicleId || undefined} onValueChange={pickStockVehicle}>
+              <SelectTrigger><SelectValue placeholder="Choose a vehicle from inventory"/></SelectTrigger>
+              <SelectContent>{inStock.map((vehicle) => <SelectItem key={vehicle.id} value={vehicle.id}>{vehicle.model} · {vehicle.variant} · {vehicle.colour} ({vehicle.status})</SelectItem>)}</SelectContent>
+            </Select>
+          </div>}
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            {section.fields.map((field) => <Field key={field.name} field={field} value={values[field.name] ?? ""} onChange={(next) => set(field.name, next)}/>)}
+          </div>
+        </GlassCard>
+      </div>)}
 
       <GlassCard className="p-6">
         <h2 className="font-display text-lg font-bold">Documents</h2>

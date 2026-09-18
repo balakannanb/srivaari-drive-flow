@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GlassCard, PageHeader } from "@/components/shared";
-import { customers, records, vehicles } from "@/lib/mock-service";
+import { addCustomer, addVehicleRequirement, customers, records, vehicles } from "@/lib/mock-service";
 
 type FieldType = "text" | "tel" | "email" | "date" | "number" | "select" | "textarea";
 type FieldDef = { name: string; label: string; type?: FieldType; placeholder?: string; options?: string[]; required?: boolean; full?: boolean };

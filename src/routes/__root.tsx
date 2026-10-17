@@ -12,8 +12,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/app-shell";
-import { SessionProvider } from "@/lib/branch-context";
-import { StoreProvider } from "@/lib/store";
 
 function NotFoundComponent() {
   return (
@@ -123,11 +121,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider>
-        <StoreProvider>
-          <AppShell><Outlet /></AppShell>
-        </StoreProvider>
-      </SessionProvider>
+      <AppShell><Outlet /></AppShell>
     </QueryClientProvider>
   );
 }

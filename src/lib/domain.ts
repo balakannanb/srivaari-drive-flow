@@ -22,12 +22,12 @@ export interface Customer {
   stage: string;
   lastActivity: string;
   photo?: string;
-  branchIds: string[];
+  branchIds?: string[];
 }
 
 export interface Vehicle {
   id: string;
-  branchId: string;
+  branchId?: string;
   model: string;
   variant: string;
   colour: string;
@@ -41,7 +41,7 @@ export interface Vehicle {
 
 export interface RecordRow {
   id: string;
-  branchId: string;
+  branchId?: string;
   primary: string;
   secondary: string;
   detail: string;

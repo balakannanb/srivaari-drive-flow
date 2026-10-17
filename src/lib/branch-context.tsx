@@ -36,7 +36,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       branchId: effective,
       setBranchId,
       isOwner,
-      branchName: scopeId ? branches.find((branch) => branch.id === scopeId)?.name ?? "Branch" : "All Branches",
+      branchName: scopeId ? branches.find((branch: { id: string }) => branch.id === scopeId)?.name ?? "Branch" : "All Branches",
       scopeId,
       inScope: (recordBranchId: string) => scopeId === null || recordBranchId === scopeId,
     };
